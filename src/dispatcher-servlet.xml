@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- controller -->
+	<context:component-scan base-package="com.jk1603.vivo.*.controller" />
+
+	<!-- request信息自动处理器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- 用到了Jackson自动转换Json与Object -->
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 视图处理器：为跳转视图增加前后缀 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 拦截器：相当于Filter -->
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />拦截路径
+			<bean class="*" />拦截器类
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+
+	<!-- 静态资源路径 -->
+	<mvc:resources location="/static/" mapping="/static/**" />
+</beans>

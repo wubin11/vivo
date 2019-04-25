@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 数据源：可以使用连接池,dataSource：可以使用pool -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://127.0.0.1:3306/vivostore?characterEncoding=utf-8"></property>
+	</bean>
+
+	<!-- mybatis-spring -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="mapUnderscoreToCamelCase" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- mybatis-mapper -->
+	<bean id="myMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.jk1603.vivo.admin.dao.UserDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- serviceBean -->
+	<context:component-scan base-package="com.jk1603.vivo.*.service" />
+</beans>
